@@ -28,7 +28,7 @@ const GridCell = styled(Box)(() => ({
     height: '100%',
 }));
 
-const Board = ({score, setScore, gameOver, setGameOver}) => {
+const Board = ({score, setScore, gameOver, setGameOver, resetTrigger}) => {
     const [board, setBoard] = useState([]);
     const [mergeAnimation, setMergeAnimation] = useState({});
     const [moveAnimation, setMoveAnimation] = useState({});
@@ -37,6 +37,11 @@ const Board = ({score, setScore, gameOver, setGameOver}) => {
     useEffect(() => {
         initializeBoard();
     }, []);
+
+    // Reset the board when resetTrigger changes
+    useEffect(() => {
+        initializeBoard();
+    }, [resetTrigger]);
 
     // Handle keyboard events
     useEffect(() => {
@@ -332,14 +337,6 @@ const Board = ({score, setScore, gameOver, setGameOver}) => {
                         )
                     ))
                 ))}
-
-                {/* Mobile swipe hint */}
-                <Box className="swipe-hint touch-only"
-                     sx={{position: 'absolute', bottom: '-30px', width: '100%', textAlign: 'center'}}>
-                    <Typography variant="caption" color="text.secondary">
-                        Swipe to move tiles
-                    </Typography>
-                </Box>
             </GameBoard>
         </SwipeHandler>
     );

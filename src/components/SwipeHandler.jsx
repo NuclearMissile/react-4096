@@ -6,11 +6,17 @@ const SwipeHandler = ({onSwipeUp, onSwipeDown, onSwipeLeft, onSwipeRight, childr
 
     useEffect(() => {
         const handleTouchStart = (e) => {
+            e.preventDefault(); // Prevent default browser behavior
             const touch = e.touches[0];
             touchStartRef.current = {x: touch.clientX, y: touch.clientY};
         };
 
+        const handleTouchMove = (e) => {
+            e.preventDefault(); // Prevent default browser behavior during the swipe
+        };
+
         const handleTouchEnd = (e) => {
+            e.preventDefault(); // Prevent default browser behavior
             if (e.touches.length > 0) return; // Ignore if there are still touches active
 
             const touch = e.changedTouches[0];
@@ -40,12 +46,14 @@ const SwipeHandler = ({onSwipeUp, onSwipeDown, onSwipeLeft, onSwipeRight, childr
         };
 
         // Add touch event listeners to the document
-        document.addEventListener('touchstart', handleTouchStart, {passive: true});
-        document.addEventListener('touchend', handleTouchEnd, {passive: true});
+        document.addEventListener('touchstart', handleTouchStart, {passive: false});
+        document.addEventListener('touchmove', handleTouchMove, {passive: false});
+        document.addEventListener('touchend', handleTouchEnd, {passive: false});
 
         // Clean up event listeners
         return () => {
             document.removeEventListener('touchstart', handleTouchStart);
+            document.removeEventListener('touchmove', handleTouchMove);
             document.removeEventListener('touchend', handleTouchEnd);
         };
     }, [onSwipeUp, onSwipeDown, onSwipeLeft, onSwipeRight]);

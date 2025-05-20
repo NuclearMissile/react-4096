@@ -30,6 +30,7 @@ function App() {
     const [score, setScore] = useState(0);
     const [bestScore, setBestScore] = useState(0);
     const [gameOver, setGameOver] = useState(false);
+    const [resetTrigger, setResetTrigger] = useState(false);
 
     // Load best score from localStorage
     useEffect(() => {
@@ -49,10 +50,11 @@ function App() {
 
     // Handle game restart
     const handleRestart = () => {
-        // The Board component will handle the actual reset
-        // We just need to reset the game state here
+        // Reset the game state
         setGameOver(false);
         setScore(0);
+        // Toggle resetTrigger to trigger board reset
+        setResetTrigger(prev => !prev);
     };
 
     return (
@@ -74,6 +76,7 @@ function App() {
                         setScore={setScore}
                         gameOver={gameOver}
                         setGameOver={setGameOver}
+                        resetTrigger={resetTrigger}
                     />
 
                     {/* Instructions */}
