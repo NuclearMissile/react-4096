@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Button, Typography, Paper} from '@mui/material';
+import {Box, Button, Typography, Paper, Link} from '@mui/material';
 import {styled} from '@mui/material/styles';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
@@ -45,9 +45,10 @@ const GameControls = ({score, bestScore, gameOver, onRestart}) => {
         <>
             <ControlsContainer>
                 <Box>
-                    <Typography variant="h4" fontWeight="bold" color="primary">
+                    <Link variant="h4" fontWeight="bold" color="primary" underline='none'
+                          href="https://github.com/NuclearMissile/react-4096" target="_blank" rel="noreferrer">
                         4096
-                    </Typography>
+                    </Link>
                 </Box>
 
                 <Box sx={{display: 'flex', gap: 2}}>
