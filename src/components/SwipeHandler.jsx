@@ -2,6 +2,7 @@ import React, {useEffect, useRef} from 'react';
 
 const SwipeHandler = ({onSwipeUp, onSwipeDown, onSwipeLeft, onSwipeRight, children}) => {
     const touchStartRef = useRef({x: 0, y: 0});
+    const containerRef = useRef(null);
     const minSwipeDistance = 50; // Minimum distance in pixels to consider a swipe
 
     useEffect(() => {
@@ -45,20 +46,25 @@ const SwipeHandler = ({onSwipeUp, onSwipeDown, onSwipeLeft, onSwipeRight, childr
             }
         };
 
-        // Add touch event listeners to the document
-        document.addEventListener('touchstart', handleTouchStart, {passive: false});
-        document.addEventListener('touchmove', handleTouchMove, {passive: false});
-        document.addEventListener('touchend', handleTouchEnd, {passive: false});
+        // Add touch event listeners to the container element
+        const container = containerRef.current;
+        if (container) {
+            container.addEventListener('touchstart', handleTouchStart, {passive: false});
+            container.addEventListener('touchmove', handleTouchMove, {passive: false});
+            container.addEventListener('touchend', handleTouchEnd, {passive: false});
+        }
 
         // Clean up event listeners
         return () => {
-            document.removeEventListener('touchstart', handleTouchStart);
-            document.removeEventListener('touchmove', handleTouchMove);
-            document.removeEventListener('touchend', handleTouchEnd);
+            if (container) {
+                container.removeEventListener('touchstart', handleTouchStart);
+                container.removeEventListener('touchmove', handleTouchMove);
+                container.removeEventListener('touchend', handleTouchEnd);
+            }
         };
     }, [onSwipeUp, onSwipeDown, onSwipeLeft, onSwipeRight]);
 
-    return <>{children}</>;
+    return <div ref={containerRef} style={{ touchAction: 'none' }}>{children}</div>;
 };
 
 export default SwipeHandler;
