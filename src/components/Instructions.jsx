@@ -37,8 +37,8 @@ const Instructions = () => {
                 How to Play
             </Typography>
 
-            <Typography variant="body2" paragraph>
-                Use your arrow keys to move the tiles. When two tiles with the same number touch, they merge into one!
+            <Typography variant="body2">
+                Use your arrow keys or swipe to move and merge the tiles.
                 The goal is to create a tile with the number 4096.
             </Typography>
 
