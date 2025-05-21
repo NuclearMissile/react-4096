@@ -1,6 +1,6 @@
 import React from 'react';
 import {Box, Typography} from '@mui/material';
-import {styled, keyframes} from '@mui/material/styles';
+import {keyframes, styled} from '@mui/material/styles';
 
 // Animations
 const appear = keyframes`
@@ -19,7 +19,7 @@ const pop = keyframes`
         transform: scale(1);
     }
     50% {
-        transform: scale(1.1);
+        transform: scale(1.2);
     }
     100% {
         transform: scale(1);
@@ -27,7 +27,7 @@ const pop = keyframes`
 `;
 
 // Styled component for the tile
-const TileBox = styled(Box)(({theme, value, mergeAnimation, moveAnimation}) => {
+const TileBox = styled(Box)(({theme, value, mergeAnimation, appearAnimation}) => {
     // Define colors based on tile value
     const getBackgroundColor = () => {
         switch (value) {
@@ -80,13 +80,7 @@ const TileBox = styled(Box)(({theme, value, mergeAnimation, moveAnimation}) => {
         backgroundColor: getBackgroundColor(),
         color: getTextColor(),
         borderRadius: '6px',
-        fontWeight: 'bold',
-        transition: 'transform 0.15s ease, left 0.15s ease, top 0.15s ease',
-        animation: mergeAnimation
-            ? `${pop} 0.15s ease`
-            : moveAnimation
-                ? 'none'
-                : `${appear} 0.2s ease`,
+        animation: appearAnimation ? `${appear} 0.15s ease` : mergeAnimation ? `${pop} 0.3s ease` : 'none',
         boxShadow: theme.shadows[2],
         zIndex: 1,
         '& .MuiTypography-root': {
@@ -96,7 +90,7 @@ const TileBox = styled(Box)(({theme, value, mergeAnimation, moveAnimation}) => {
     };
 });
 
-const Tile = ({value, row, col, mergeAnimation, moveAnimation}) => {
+const Tile = ({value, row, col, mergeAnimation, appearAnimation}) => {
     // Calculate position based on row and column
     const top = `calc(${row * 25}% + 8px)`;
     const left = `calc(${col * 25}% + 8px)`;
@@ -105,7 +99,7 @@ const Tile = ({value, row, col, mergeAnimation, moveAnimation}) => {
         <TileBox
             value={value}
             mergeAnimation={mergeAnimation}
-            moveAnimation={moveAnimation}
+            appearAnimation={appearAnimation}
             sx={{top, left}}
         >
             <Typography variant="h4">{value}</Typography>

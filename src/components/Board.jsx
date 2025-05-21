@@ -31,7 +31,7 @@ const GridCell = styled(Box)(() => ({
 const Board = ({score, setScore, gameOver, setGameOver, resetTrigger}) => {
     const [board, setBoard] = useState([]);
     const [mergeAnimation, setMergeAnimation] = useState({});
-    const [moveAnimation, setMoveAnimation] = useState({});
+    const [appearAnimation, setAppearAnimation] = useState({});
 
     // Initialize the board
     useEffect(() => {
@@ -47,6 +47,10 @@ const Board = ({score, setScore, gameOver, setGameOver, resetTrigger}) => {
     useEffect(() => {
         const handleKeyDown = (e) => {
             if (gameOver) return;
+
+            if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                e.preventDefault();
+            }
 
             switch (e.key) {
                 case 'ArrowUp':
@@ -73,13 +77,14 @@ const Board = ({score, setScore, gameOver, setGameOver, resetTrigger}) => {
     // Initialize the board with two random tiles
     const initializeBoard = () => {
         const newBoard = Array(4).fill().map(() => Array(4).fill(0));
-        addRandomTile(newBoard);
-        addRandomTile(newBoard);
+        const newAppearAnimation = {};
+        newAppearAnimation[addRandomTile(newBoard)] = true;
+        newAppearAnimation[addRandomTile(newBoard)] = true;
         setBoard(newBoard);
         setScore(0);
         setGameOver(false);
         setMergeAnimation({});
-        setMoveAnimation({});
+        setAppearAnimation(newAppearAnimation);
     };
 
     // Add a random tile (2 or 4) to an empty cell
@@ -98,7 +103,10 @@ const Board = ({score, setScore, gameOver, setGameOver, resetTrigger}) => {
             const {row, col} = emptyCells[Math.floor(Math.random() * emptyCells.length)];
             const random = Math.random();
             board[row][col] = random < 0.7 ? 2 : (random < 0.9 ? 4 : 8);
+            return `${row}-${col}`;
         }
+
+        return 'dummy';
     };
 
     // Check if the game is over
@@ -131,7 +139,7 @@ const Board = ({score, setScore, gameOver, setGameOver, resetTrigger}) => {
     const moveUp = () => {
         const newBoard = JSON.parse(JSON.stringify(board));
         const newMergeAnimation = {};
-        const newMoveAnimation = {};
+        const newAppearAnimation = {};
         let moved = false;
         let newScore = score;
 
@@ -144,7 +152,6 @@ const Board = ({score, setScore, gameOver, setGameOver, resetTrigger}) => {
                         newBoard[row][j] = 0;
                         row--;
                         moved = true;
-                        newMoveAnimation[`${row + 1}-${j}-${row}-${j}`] = true;
                     }
 
                     if (row > 0 && newBoard[row - 1][j] === newBoard[row][j]) {
@@ -159,11 +166,11 @@ const Board = ({score, setScore, gameOver, setGameOver, resetTrigger}) => {
         }
 
         if (moved) {
-            addRandomTile(newBoard);
+            newAppearAnimation[addRandomTile(newBoard)] = true;
             setBoard(newBoard);
             setScore(newScore);
             setMergeAnimation(newMergeAnimation);
-            setMoveAnimation(newMoveAnimation);
+            setAppearAnimation(newAppearAnimation);
 
             if (checkGameOver(newBoard)) {
                 setGameOver(true);
@@ -175,7 +182,7 @@ const Board = ({score, setScore, gameOver, setGameOver, resetTrigger}) => {
     const moveDown = () => {
         const newBoard = JSON.parse(JSON.stringify(board));
         const newMergeAnimation = {};
-        const newMoveAnimation = {};
+        const newAppearAnimation = {};
         let moved = false;
         let newScore = score;
 
@@ -188,7 +195,6 @@ const Board = ({score, setScore, gameOver, setGameOver, resetTrigger}) => {
                         newBoard[row][j] = 0;
                         row++;
                         moved = true;
-                        newMoveAnimation[`${row - 1}-${j}-${row}-${j}`] = true;
                     }
 
                     if (row < 3 && newBoard[row + 1][j] === newBoard[row][j]) {
@@ -203,11 +209,11 @@ const Board = ({score, setScore, gameOver, setGameOver, resetTrigger}) => {
         }
 
         if (moved) {
-            addRandomTile(newBoard);
+            newAppearAnimation[addRandomTile(newBoard)] = true;
             setBoard(newBoard);
             setScore(newScore);
             setMergeAnimation(newMergeAnimation);
-            setMoveAnimation(newMoveAnimation);
+            setAppearAnimation(newAppearAnimation);
 
             if (checkGameOver(newBoard)) {
                 setGameOver(true);
@@ -219,7 +225,7 @@ const Board = ({score, setScore, gameOver, setGameOver, resetTrigger}) => {
     const moveLeft = () => {
         const newBoard = JSON.parse(JSON.stringify(board));
         const newMergeAnimation = {};
-        const newMoveAnimation = {};
+        const newAppearAnimation = {};
         let moved = false;
         let newScore = score;
 
@@ -232,7 +238,6 @@ const Board = ({score, setScore, gameOver, setGameOver, resetTrigger}) => {
                         newBoard[i][col] = 0;
                         col--;
                         moved = true;
-                        newMoveAnimation[`${i}-${col + 1}-${i}-${col}`] = true;
                     }
 
                     if (col > 0 && newBoard[i][col - 1] === newBoard[i][col]) {
@@ -247,11 +252,11 @@ const Board = ({score, setScore, gameOver, setGameOver, resetTrigger}) => {
         }
 
         if (moved) {
-            addRandomTile(newBoard);
+            newAppearAnimation[addRandomTile(newBoard)] = true;
             setBoard(newBoard);
             setScore(newScore);
             setMergeAnimation(newMergeAnimation);
-            setMoveAnimation(newMoveAnimation);
+            setAppearAnimation(newAppearAnimation);
 
             if (checkGameOver(newBoard)) {
                 setGameOver(true);
@@ -263,7 +268,7 @@ const Board = ({score, setScore, gameOver, setGameOver, resetTrigger}) => {
     const moveRight = () => {
         const newBoard = JSON.parse(JSON.stringify(board));
         const newMergeAnimation = {};
-        const newMoveAnimation = {};
+        const newAppearAnimation = {};
         let moved = false;
         let newScore = score;
 
@@ -276,7 +281,6 @@ const Board = ({score, setScore, gameOver, setGameOver, resetTrigger}) => {
                         newBoard[i][col] = 0;
                         col++;
                         moved = true;
-                        newMoveAnimation[`${i}-${col - 1}-${i}-${col}`] = true;
                     }
 
                     if (col < 3 && newBoard[i][col + 1] === newBoard[i][col]) {
@@ -291,11 +295,11 @@ const Board = ({score, setScore, gameOver, setGameOver, resetTrigger}) => {
         }
 
         if (moved) {
-            addRandomTile(newBoard);
+            newAppearAnimation[addRandomTile(newBoard)] = true;
             setBoard(newBoard);
             setScore(newScore);
             setMergeAnimation(newMergeAnimation);
-            setMoveAnimation(newMoveAnimation);
+            setAppearAnimation(newAppearAnimation);
 
             if (checkGameOver(newBoard)) {
                 setGameOver(true);
@@ -331,9 +335,7 @@ const Board = ({score, setScore, gameOver, setGameOver, resetTrigger}) => {
                                 row={rowIndex}
                                 col={colIndex}
                                 mergeAnimation={mergeAnimation[`${rowIndex}-${colIndex}`]}
-                                moveAnimation={Object.keys(moveAnimation).filter(key =>
-                                    key.endsWith(`-${rowIndex}-${colIndex}`)
-                                ).length > 0}
+                                appearAnimation={appearAnimation[`${rowIndex}-${colIndex}`]}
                             />
                         )
                     ))
