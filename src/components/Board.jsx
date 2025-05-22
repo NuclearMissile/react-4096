@@ -100,8 +100,8 @@ const Board = ({score, setScore, gameOver, setGameOver, resetTrigger}) => {
         }
 
         if (emptyCells.length > 0) {
-            const {row, col} = emptyCells[Math.floor(Math.random() * emptyCells.length)];
             const random = Math.random();
+            const {row, col} = emptyCells[Math.floor(random * emptyCells.length)];
             board[row][col] = random < 0.7 ? 2 : (random < 0.9 ? 4 : 8);
             return `${row}-${col}`;
         }

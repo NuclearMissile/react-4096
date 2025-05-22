@@ -80,7 +80,7 @@ const TileBox = styled(Box)(({theme, value, mergeAnimation, appearAnimation}) =>
         backgroundColor: getBackgroundColor(),
         color: getTextColor(),
         borderRadius: '6px',
-        animation: appearAnimation ? `${appear} 0.15s ease` : mergeAnimation ? `${pop} 0.3s ease` : 'none',
+        animation: appearAnimation ? `${appear} 0.3s ease` : mergeAnimation ? `${pop} 0.3s ease` : 'none',
         boxShadow: theme.shadows[2],
         zIndex: 1,
         '& .MuiTypography-root': {
