@@ -7,7 +7,6 @@ const SwipeHandler = ({onSwipeUp, onSwipeDown, onSwipeLeft, onSwipeRight, childr
 
     useEffect(() => {
         const handleTouchStart = (e) => {
-            e.preventDefault(); // Prevent default browser behavior
             const touch = e.touches[0];
             touchStartRef.current = {x: touch.clientX, y: touch.clientY};
         };
@@ -17,7 +16,6 @@ const SwipeHandler = ({onSwipeUp, onSwipeDown, onSwipeLeft, onSwipeRight, childr
         };
 
         const handleTouchEnd = (e) => {
-            e.preventDefault(); // Prevent default browser behavior
             if (e.touches.length > 0) return; // Ignore if there are still touches active
 
             const touch = e.changedTouches[0];
